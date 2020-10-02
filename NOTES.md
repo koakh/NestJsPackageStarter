@@ -306,10 +306,11 @@ Buon Giorno!
 
 now we have our development environment ready to roll
 
-## Commit project and get comment id 6b178be
+## Commit project
+
+commit id [8b0737b](https://github.com/koakh/NestJsPackageStarter/commit/8b0737b24454bad1641c0182190824f1b2cc54aa)
 
 ```shell
 $ git add .
-$ git commit -am "now we have our development environment ready to roll"
-[main 6b178be] now we have our development environment ready to roll
+[main 8b0737b] now we have our development environment ready to roll
 ```
