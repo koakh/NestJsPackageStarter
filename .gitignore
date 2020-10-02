@@ -1,0 +1,4 @@
+nestjs-package-starter/node_modules/**
+nestjs-package-starter-consumer/node_modules/**
+.trash
+.bak
