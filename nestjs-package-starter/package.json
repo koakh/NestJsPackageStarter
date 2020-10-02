@@ -5,7 +5,7 @@
   "author": "Mário Monteiro <marioammonteiro@gmail.com>",
   "license": "MIT",
   "readmeFilename": "README.md",
-  "main": "dist/test.js",
+  "main": "dist/index.js",
   "files": [
     "dist/**/*",
     "*.md"
