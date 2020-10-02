@@ -1,5 +1,27 @@
 # NOTES
 
+- [NOTES](#notes)
+  - [Links](#links)
+  - [TLDR](#tldr)
+  - [Start NestJs NPM Package](#start-nestjs-npm-package)
+    - [Clone and change metadata](#clone-and-change-metadata)
+    - [Init Git/Remote Repository](#init-gitremote-repository)
+    - [Create remote repository NestJsPackageStarter](#create-remote-repository-nestjspackagestarter)
+    - [Setting up for development](#setting-up-for-development)
+    - [Create the test app / consumer app](#create-the-test-app--consumer-app)
+    - [Edit root .gitignore](#edit-root-gitignore)
+    - [Update all consumer dependencies to latest and greatest](#update-all-consumer-dependencies-to-latest-and-greatest)
+    - [Update starter dependencies to nest 7.0](#update-starter-dependencies-to-nest-70)
+    - [Build the package](#build-the-package)
+    - [Install the package into the test app](#install-the-package-into-the-test-app)
+    - [Use the package in the test app](#use-the-package-in-the-test-app)
+    - [Configure/Fix debugger](#configurefix-debugger)
+    - [Do some changes in package](#do-some-changes-in-package)
+    - [Commit project](#commit-project)
+  - [Problems](#problems)
+    - [Package.json "dist/test.js"](#packagejson-disttestjs)
+    - [Error: Cannot find module 'reflect-metadata'](#error-cannot-find-module-reflect-metadata)
+
 ## Links
 
 - [Publishing NestJS Packages with npm](https://dev.to/nestjs/publishing-nestjs-packages-with-npm-21fm)
@@ -9,6 +31,8 @@
 used node version `node/v12.8.1`
 
 ## Start NestJs NPM Package
+
+### Clone and change metadata
 
 ```shell
 $ git clone https://github.com/nestjsplus/nestjs-package-starter.git
@@ -25,7 +49,7 @@ $ code nestjs-package-starter/package.json
   "author": "Mário Monteiro <marioammonteiro@gmail.com>",
   "license": "MIT",
   "readmeFilename": "README.md",
-  "main": "dist/test.js",
+  "main": "dist/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/koakh/NestJsPackageStarter"
@@ -33,7 +57,7 @@ $ code nestjs-package-starter/package.json
   "bugs": "https://github.com/koakh/NestJsPackageStarter",
 ```
 
-## Init Git/Remote Repository
+### Init Git/Remote Repository
 
 ```shell
 $ touch README.md
@@ -42,7 +66,7 @@ $ git add .
 $ git commit -am "first commit"
 ```
 
-## Create remote repository NestJsPackageStarter
+### Create remote repository NestJsPackageStarter
 
 ```shell
 git branch -M main
@@ -50,14 +74,14 @@ git remote add origin https://github.com/koakh/NestJsPackageStarter.git
 git push -u origin main
 ```
 
-## Setting up for development
+### Setting up for development
 
 ```shell
 $ cd nestjs-package-starter/
 $ npm i
 ```
 
-## Create the test app / consumer app
+### Create the test app / consumer app
 
 In your second terminal window, make sure you start out in the top level folder you created. Scaffold the small NestJS app we'll be using to exercise our package.
 
@@ -76,7 +100,7 @@ Your folder structure should look similar to this now:
 └── README.md
 ```
 
-## Edit root .gitignore
+### Edit root .gitignore
 
 ```shell
 nestjs-package-starter/node_modules/**
@@ -90,7 +114,7 @@ $ git add .
 $ git commit -am "commit before update starter npm dependencies"
 ```
 
-## Update all consumer dependencies to latest and greatest
+### Update all consumer dependencies to latest and greatest
 
 ```shell
 $ code nestjs-package-starter-consumer/package.json
@@ -139,7 +163,7 @@ $ rm package-lock.json
 $ npm i
 ```
 
-## Update starter dependencies to nest 7.0
+### Update starter dependencies to nest 7.0
 
 ```shell
 # open side by side
@@ -195,7 +219,7 @@ $ rm package-lock.json
 $ npm i
 ```
 
-## Build the package
+### Build the package
 
 Take a moment to poke around in the `nestjs-package-starter/nestjs-package-starter` folder
 
@@ -207,7 +231,7 @@ $ git add . && git commit -am "finished dependencies update"
 $ git push
 ```
 
-## Install the package into the test app
+### Install the package into the test app
 
 ```shell
 $ cd nestjs-package-starter-consumer/
@@ -216,7 +240,7 @@ $ npm install ..
 $ npm install ../nestjs-package-starter
 ```
 
-## Use the package in the test app
+### Use the package in the test app
 
 The template package exports a single simple test function. Examine `code ../nestjs-package-starter/src/test.ts` to see it:
 
@@ -251,7 +275,7 @@ $ curl localhost:3000
 Hello from the new package!
 ```
 
-## Configure/Fix debugger
+### Configure/Fix debugger
 
 we must fix `nestjs-package-starter-consumer` `npm run start:debug`, else it won't start as expected, change
 
@@ -277,7 +301,7 @@ add `../nestjs-package-starter/dist` to `watch`, this way we have hot reload wor
 }
 ```
 
-## Do some changes in package
+### Do some changes in package
 
 ```shell
 # in window 1 : nestjs-package-starter-consumer
@@ -306,7 +330,7 @@ Buon Giorno!
 
 now we have our development environment ready to roll
 
-## Commit project
+### Commit project
 
 commit id [8b0737b](https://github.com/koakh/NestJsPackageStarter/commit/8b0737b24454bad1641c0182190824f1b2cc54aa)
 
@@ -314,3 +338,55 @@ commit id [8b0737b](https://github.com/koakh/NestJsPackageStarter/commit/8b0737b
 $ git add .
 [main 8b0737b] now we have our development environment ready to roll
 ```
+
+## Problems
+
+### Package.json "dist/test.js"
+
+problems detected in authentication package
+
+```shell
+$ npm run start
+TSError: ⨯ Unable to compile TypeScript:
+src/app.module.ts:4:28 - error TS2307: Cannot find module '@koakh/nestjs-package-jwt-authentication' or its corresponding type declarations.
+
+4 import { AuthModule } from '@koakh/nestjs-package-jwt-authentication';
+```
+
+fuck the problem is this `"main": "dist/test.js"`, change to "main": `"dist/index.js"`
+
+```json
+{
+  "name": "@koakh/nestjs-package-jwt-authentication",
+  "version": "1.0.0",
+  "description": "Koakh NestJS Jwt Authentication Package",
+  "author": "Mário Monteiro <marioammonteiro@gmail.com>",
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "main": "dist/test.js",
+```
+
+and re-install `npm i ../nestjs-package-jwt-authentication`
+
+### Error: Cannot find module 'reflect-metadata'
+
+```shell
+ cd nestjs-package-jwt-authentication-consumer
+$ npm run start
+Error: Cannot find module 'reflect-metadata'
+required in `nestjs-package-jwt-authentication`
+Require stack:
+- /media/mario/Storage/Documents/Development/Node/@NestJsPackages/TypescriptNestJsPackageJwtAuthentication/nestjs-package-jwt-authentication/node_modules/@nestjs/common/index.js
+```
+
+- [Cannot find module 'reflect-metadata](https://github.com/nestjs/nest/issues/1211)
+
+It's a `peerDependency`, You need to install it alongside rxjs aswell.
+
+```shell
+# install in package
+$ cd nestjs-package-jwt-authentication
+$ npm install --save reflect-metadata rxjs
+```
+
+done
