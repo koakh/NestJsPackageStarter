@@ -381,7 +381,7 @@ Require stack:
 
 - [Cannot find module 'reflect-metadata](https://github.com/nestjs/nest/issues/1211)
 
-It's a `peerDependency`, You need to install it alongside rxjs aswell.
+It's a `peerDependency`, You need to install it alongside `rxjs` aswell, in package library `nestjs-package-jwt-authentication`
 
 ```shell
 # install in package
