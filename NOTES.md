@@ -16,8 +16,11 @@
     - [Install the package into the test app](#install-the-package-into-the-test-app)
     - [Use the package in the test app](#use-the-package-in-the-test-app)
     - [Configure/Fix debugger](#configurefix-debugger)
-    - [Do some changes in package](#do-some-changes-in-package)
+    - [Configure package source maps](#configure-package-source-maps)
+      - [Fix Problem, debugging package ts files and add source maps](#fix-problem-debugging-package-ts-files-and-add-source-maps)
     - [Commit project](#commit-project)
+  - [Useful stuff implemented in other based package projects](#useful-stuff-implemented-in-other-based-package-projects)
+    - [Use Environment variables](#use-environment-variables)
   - [Problems](#problems)
     - [Package.json "dist/test.js"](#packagejson-disttestjs)
     - [Error: Cannot find module 'reflect-metadata'](#error-cannot-find-module-reflect-metadata)
@@ -25,6 +28,8 @@
 ## Links
 
 - [Publishing NestJS Packages with npm](https://dev.to/nestjs/publishing-nestjs-packages-with-npm-21fm)
+- [nestjsplus/nestjs-package-starter](https://github.com/nestjsplus/nestjs-package-starter)
+- [Koanh/NestJsPackageStarter](https://github.com/koakh/NestJsPackageStarter)
 
 ## TLDR
 
@@ -291,12 +296,7 @@ remove `-brk` from `--inspect-brk`
 
 add `../nestjs-package-starter/dist` to `watch`, this way we have hot reload working with `start:dev` and `start:debug` in consumer app
 
-`nestjs-package-starter-consumer/nodemon.json`
-`nestjs-package-starter-consumer/nodemon-debug.json`
-
-```json
-{
-  "watch": ["src", "../nestjs-package-starter/dist"],
+`nestjs-package-starte0/nestjs-package-starter/dist"],
   ...
 }
 ```
@@ -328,6 +328,71 @@ $ curl localhost:3000
 Buon Giorno!
 ```
 
+### Configure package source maps
+
+to debug with ts files we must do some magic
+
+first edit package `nestjs-package-starter/tsconfig.json` and enable sourceMap's
+
+change `"sourceMap": false` to `"sourceMap": true`
+
+`nestjs-package-starter/tsconfig.json`
+
+```json
+{
+  "compilerOptions": {
+    "sourceMap": false,
+  }
+}
+```
+
+now when we build package we have new map files
+
+- `nestjs-package-starter/tsconfig.json`
+- `nestjs-package-starter/dist/test.js.map`
+- `nestjs-package-starter/dist/index.js.map`
+
+#### Fix Problem, debugging package ts files and add source maps
+
+```shell
+Could not load source '/media/mario/Storage/Documents/Development/@CriticalLinksBitBucket/c3next/src/test.ts': Unable to retrieve source content.
+```
+
+> Note: to fix this in a elegant way, we must create a `.vscode/launch.json` on root of `workspaceFolder`, and it starts to work, seems that the trick is back on dir, and debug in workspaceFolder and not in `nestjs-package-starter-consumer` folder
+
+add `.vscode/launch.json`
+
+```json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Program",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}/nestjs-package-starter-consumer/src/main.ts",
+      "outFiles": [
+        "${workspaceFolder}/**/*.js"
+      ]
+    }
+  ]
+}
+```
+
+now launch F5 it works without issues, great with land in 
+
+`nestjs-package-starter/src/test.ts` at debugger directive
+
+```typescript
+export function getHello(): string {
+  debugger;
+  return 'Buon Giorno!';
+}
+```
+
 now we have our development environment ready to roll
 
 ### Commit project
@@ -338,6 +403,12 @@ commit id [8b0737b](https://github.com/koakh/NestJsPackageStarter/commit/8b0737b
 $ git add .
 [main 8b0737b] now we have our development environment ready to roll
 ```
+
+## Useful stuff implemented in other based package projects
+
+### Use Environment variables
+
+to use Environment variables, read [notes](https://github.com/koakh/NestJsPackageJwtAuthentication/blob/main/NOTES.md) from NestJsPackageJwtAuthentication
 
 ## Problems
 
@@ -388,5 +459,3 @@ It's a `peerDependency`, You need to install it alongside `rxjs` aswell, in pack
 $ cd nestjs-package-jwt-authentication
 $ npm install --save reflect-metadata rxjs
 ```
-
-done
