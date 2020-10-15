@@ -382,7 +382,7 @@ add `.vscode/launch.json`
 }
 ```
 
-now launch F5 it works without issues, great with land in 
+now launch F5 it works without issues, great, we land in `debugger;`
 
 `nestjs-package-starter/src/test.ts` at debugger directive
 
