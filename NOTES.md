@@ -392,7 +392,7 @@ add `.vscode/launch.json`
 
 Note: `"outputCapture": "std"` to show output in **debug console** tab
 
-now launch F5 it works without issues
+now launch F5 it works without issues, great, we land in `debugger;`
 
 `nestjs-package-starter/src/test.ts` at debugger directive
 
