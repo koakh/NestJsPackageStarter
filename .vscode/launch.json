@@ -14,7 +14,8 @@
       "program": "${workspaceFolder}/nestjs-package-starter-consumer/src/main.ts",
       "outFiles": [
         "${workspaceFolder}/**/*.js"
-      ]
+      ],
+      "outputCapture": "std"
     }
   ]
 }
